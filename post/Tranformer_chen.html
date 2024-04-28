@@ -1,0 +1,304 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>陈硕--Transformer-Attention Is All You Need | 专属于我俩的爱情空间</title><meta name="author" content="大朋友精品制作"><meta name="copyright" content="大朋友精品制作"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Transformer-Attention Is All You Need为什么提出Transformer,它到底是何方神圣？ 它到底是如何表现高的性能，是否值得去研究？  (1) Transformerself-attention (2) 位置编码 (3) 网络编码模块 (4) 网络解码模块   为什么引入Transformer?Transformer模型使用了Self-Attention机制，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="陈硕--Transformer-Attention Is All You Need">
+<meta property="og:url" content="http://example.com/post/Tranformer_chen.html">
+<meta property="og:site_name" content="专属于我俩的爱情空间">
+<meta property="og:description" content="Transformer-Attention Is All You Need为什么提出Transformer,它到底是何方神圣？ 它到底是如何表现高的性能，是否值得去研究？  (1) Transformerself-attention (2) 位置编码 (3) 网络编码模块 (4) 网络解码模块   为什么引入Transformer?Transformer模型使用了Self-Attention机制，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jsd.012700.xyz/gh/jerryc127/CDN@latest/cover/default_bg.png">
+<meta property="article:published_time" content="2024-04-28T14:36:50.552Z">
+<meta property="article:modified_time" content="2024-04-24T09:19:44.048Z">
+<meta property="article:author" content="大朋友精品制作">
+<meta property="article:tag" content="Tranformer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jsd.012700.xyz/gh/jerryc127/CDN@latest/cover/default_bg.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/post/Tranformer_chen.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50000,"languages":{"author":"作者: 大朋友精品制作","link":"链接: ","source":"来源: 专属于我俩的爱情空间","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '陈硕--Transformer-Attention Is All You Need',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-04-24 17:19:44'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><div class="aplayer no-destroy" data-id="464916877" data-server="netease" data-type="song" data-fixed="true" data-autoplay="true"> </div><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.0.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">31</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">29</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="专属于我俩的爱情空间"><span class="site-name">专属于我俩的爱情空间</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">陈硕--Transformer-Attention Is All You Need</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-04-28T14:36:50.552Z" title="发表于 2024-04-28 22:36:50">2024-04-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-24T09:19:44.048Z" title="更新于 2024-04-24 17:19:44">2024-04-24</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">683</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>2分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="陈硕--Transformer-Attention Is All You Need"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="Transformer-Attention-Is-All-You-Need"><a href="#Transformer-Attention-Is-All-You-Need" class="headerlink" title="Transformer-Attention Is All You Need"></a>Transformer-Attention Is All You Need</h1><p>为什么提出Transformer,它到底是何方神圣？</p>
+<p>它到底是如何表现高的性能，是否值得去研究？</p>
+<ol>
+<li>(1) Transformerself-attention</li>
+<li>(2) 位置编码</li>
+<li>(3) 网络编码模块</li>
+<li>(4) 网络解码模块</li>
+</ol>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/04/18/HXW1EfiBJrboDQd.png" alt="image-20240418120642326"></p>
+<p><strong>为什么引入Transformer?</strong><br>Transformer模型使用了Self-Attention机制，不采用RNN顺序结构，使得模型可以并行化训练，<br>而且能够拥有全局信息。<br>说白了：<strong>并行加速计算+学习全局信息</strong></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/04/18/WnyJMDTkHBFsIRv.png" alt="image-20240418121136374"></p>
+<p>CNN缺点：只能考虑有限的内容<br>CNN优点：并行化处理</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/04/18/hwjCQJVX4BmAlNK.png" alt="image-20240418121404965"></p>
+<p>如何既能并行又能学习到全局信息？→Self-Attention</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/beiyoudaxue/pic2023@main/img/202404181215168.png" alt="image-20240418121554091"></p>
+<p>为什么提出Transformer,它到底是何方神圣？</p>
+<p>它到底是如何表现高的性能，是否值得去研究？</p>
+<ol>
+<li>(1)Transformerself-sttention</li>
+<li>(2)位置编码</li>
+<li>(3)网络编码模块</li>
+<li>(4)网络解码模块</li>
+</ol>
+<p>具体如何实现Self-Attention?(q、k、v计算)</p>
+<h2 id="系统框架"><a href="#系统框架" class="headerlink" title="系统框架"></a>系统框架</h2><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/beiyoudaxue/pic2023@main/img/202404181216192.png" alt="image-20240418121659147"></p>
+<hr>
+<p>具体如何实现Self-Attention?(q、k、v计算)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">q:q：query (to <span class="keyword">match</span> others) 查询</span><br><span class="line">qi Waai</span><br><span class="line">k:k：key (to be matched) 匹配</span><br><span class="line">ki =Wkai</span><br><span class="line">v:v：information to be extracted 信息</span><br><span class="line">vi=Wval</span><br></pre></td></tr></table></figure>
+
+<p>q：查询</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/beiyoudaxue/pic2023@main/img/202404222223323.png" alt="image-20240422222349223"></p>
+<p>如何获得qkv</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/beiyoudaxue/pic2023@main/img/202404222226415.png" alt="image-20240422222610310"></p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">d is the dim of g and k</span><br></pre></td></tr></table></figure>
+
+<p>Self-attention</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/beiyoudaxue/pic2023@main/img/202404222227526.png" alt="image-20240422222739442"></p>
+<p>Considering the whole sequence</p>
+<p>数学推导并行计算机制！</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/beiyoudaxue/pic2023@main/img/202404222229282.png" alt="image-20240422222944188"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/beiyoudaxue/pic2023@main/img/202404222231757.png" alt="image-20240422223107651"></p>
+<p>(ignore vd for simplicity)</p>
+<p>步骤①、②、③</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/beiyoudaxue/pic2023@main/img/202404222233627.png" alt="image-20240422223322500"></p>
+<p>QKV如何计算<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/beiyoudaxue/pic2023@main/img/202404222235648.png" alt="image-20240422223526570"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/beiyoudaxue/pic2023@main/img/202404222236256.png" alt="image-20240422223638154"></p>
+<h3 id="位置编码"><a href="#位置编码" class="headerlink" title="位置编码"></a>位置编码</h3><p>p24:06</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/beiyoudaxue/pic2023@main/img/202404231053905.png" alt="image-20240423105345813"></p>
+<p>Positional Encoding !!!!!<br>位置编码嵌入与词嵌入相加？<br>$$W\cdot x_p^i&#x3D;[W^I,W^P]\cdot\left[x^i\backslash\text{p}^i\right]&#x3D;W^I\cdot x^i+W^P\cdot p^i&#x3D;a^i+e^i$$<br>位置编码获取方式：可以通过训练得到，也可以使用公式得到；<br>$$\begin{matrix}\text{[Sin(x),cos(x)}&amp;\text{Sin(2x),cos(2x)….]}\end{matrix}$$</p>
+<p>$$PE\left(1\right)&#x3D;\left[\sin\left(1&#x2F;10000^{0&#x2F;512}\right),\cos\left(1&#x2F;10000^{0&#x2F;512}\right),\sin\left(1&#x2F;10000^{2&#x2F;512}\right),\cos\left(1&#x2F;10000^{2&#x2F;512}\right),\ldots\right]$$</p>
+<p>P27:35</p>
+<p>为什么提出Transformer,它到底是何方神圣？<br>它到底是如何表现高的性能，是否值得去研究？</p>
+<ol>
+<li>(1)Transformerself-sttention</li>
+<li>(2)位置编码</li>
+<li>(3)网络编码模块</li>
+<li>(4)网络解码模块</li>
+</ol>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/beiyoudaxue/pic2023@main/img/202404231059315.png" alt="image-20240423105957216"></p>
+<p>Add表示残差连接<br>(Residual Connection)用于防止网络退化<br>Norm表示Layer Normalization,用于对每一层的激活值进行归一化</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/beiyoudaxue/pic2023@main/img/202404231102283.png" alt="image-20240423110208180"></p>
+<h3 id="Encoder-30"><a href="#Encoder-30" class="headerlink" title="Encoder 30"></a>Encoder 30</h3><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/beiyoudaxue/pic2023@main/img/202404231102352.png" alt="image-20240423110228255"></p>
+<p>接着是一个Feed Forward的前馈网络和一个Add&amp;Norm Layer.<br>所以，这一个绿色的block的前2个Layer操作的表达式为：<br>O1 Layer Normalization(I+Multi-head Self-Attention(I))<br>这一个绿色的block的后2个Layer操作的表达式为：<br>2&#x3D;Layer Normalization(1+Feed Forward Network(O))<br>Block(I)&#x3D;02<br>所以Transformer的Encoder的整体操作为：<br>Encoder(I)&#x3D;Block(…Block(Block)（）)<br>quadN times</p>
+<h3 id="Dencoder-31"><a href="#Dencoder-31" class="headerlink" title="Dencoder 31"></a>Dencoder 31</h3><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/beiyoudaxue/pic2023@main/img/202404231104724.png" alt="image-20240423110410631"></p>
+<p>新加的attention多加了一个mask,因为训练时的output都是Ground Truth,这样可以确保预测第i个位置时不会接触到未来的信息。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Tranformer/">Tranformer</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/463e.html" title="1 3 Transformer"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://jsd.012700.xyz/gh/jerryc127/CDN@latest/cover/default_bg.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">1 3 Transformer</div></div></a></div><div class="next-post pull-right"><a href="/post/7bc6.html" title="Transformer学习笔记四：ResNet（残差网络）"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Transformer学习笔记四：ResNet（残差网络）</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/Tranformer3.html" title="Transformer学习笔记三：为什么Transformer要用LayerNorm&#x2F;Batch Normalization &amp; Layer Normalization （批量&amp;层标准化)"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-28</div><div class="title">Transformer学习笔记三：为什么Transformer要用LayerNorm&#x2F;Batch Normalization &amp; Layer Normalization （批量&amp;层标准化)</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">大朋友精品制作</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">31</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">29</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">专为你而准备</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Transformer-Attention-Is-All-You-Need"><span class="toc-number">1.</span> <span class="toc-text">Transformer-Attention Is All You Need</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E6%A1%86%E6%9E%B6"><span class="toc-number">1.1.</span> <span class="toc-text">系统框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81"><span class="toc-number">1.1.1.</span> <span class="toc-text">位置编码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Encoder-30"><span class="toc-number">1.1.2.</span> <span class="toc-text">Encoder 30</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dencoder-31"><span class="toc-number">1.1.3.</span> <span class="toc-text">Dencoder 31</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/463e.html" title="1 3 Transformer"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://jsd.012700.xyz/gh/jerryc127/CDN@latest/cover/default_bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="1 3 Transformer"/></a><div class="content"><a class="title" href="/post/463e.html" title="1 3 Transformer">1 3 Transformer</a><time datetime="2024-04-28T14:36:50.579Z" title="发表于 2024-04-28 22:36:50">2024-04-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/Tranformer_chen.html" title="陈硕--Transformer-Attention Is All You Need"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://jsd.012700.xyz/gh/jerryc127/CDN@latest/cover/default_bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="陈硕--Transformer-Attention Is All You Need"/></a><div class="content"><a class="title" href="/post/Tranformer_chen.html" title="陈硕--Transformer-Attention Is All You Need">陈硕--Transformer-Attention Is All You Need</a><time datetime="2024-04-28T14:36:50.552Z" title="发表于 2024-04-28 22:36:50">2024-04-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/7bc6.html" title="Transformer学习笔记四：ResNet（残差网络）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Transformer学习笔记四：ResNet（残差网络）"/></a><div class="content"><a class="title" href="/post/7bc6.html" title="Transformer学习笔记四：ResNet（残差网络）">Transformer学习笔记四：ResNet（残差网络）</a><time datetime="2024-04-28T14:36:50.518Z" title="发表于 2024-04-28 22:36:50">2024-04-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/4417.html" title="Transformer学习笔记二：Self-Attention（自注意力机制）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Transformer学习笔记二：Self-Attention（自注意力机制）"/></a><div class="content"><a class="title" href="/post/4417.html" title="Transformer学习笔记二：Self-Attention（自注意力机制）">Transformer学习笔记二：Self-Attention（自注意力机制）</a><time datetime="2024-04-28T14:36:50.457Z" title="发表于 2024-04-28 22:36:50">2024-04-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/e5ad.html" title="Transformer学习笔记一：Positional Encoding（位置编码）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://jsd.012700.xyz/gh/jerryc127/CDN@latest/cover/default_bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Transformer学习笔记一：Positional Encoding（位置编码）"/></a><div class="content"><a class="title" href="/post/e5ad.html" title="Transformer学习笔记一：Positional Encoding（位置编码）">Transformer学习笔记一：Positional Encoding（位置编码）</a><time datetime="2024-04-28T14:36:50.412Z" title="发表于 2024-04-28 22:36:50">2024-04-28</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 大朋友精品制作</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const abcjsInit = () => {
+    const abcjsFn = () => {
+      document.querySelectorAll(".abc-music-sheet").forEach(ele => {
+        ABCJS.renderAbc(ele, ele.innerHTML, {responsive: 'resize'})
+      })
+    }
+    
+    typeof ABCJS === 'object' ? abcjsFn()
+      : getScript('https://cdn.jsdelivr.net/npm/abcjs/dist/abcjs-basic-min.min.js').then(abcjsFn)
+  }
+
+  window.pjax ? abcjsInit() : window.addEventListener('load', abcjsInit)
+})()</script></div><div class="aplayer no-destroy" data-id="5285574294" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true"> </div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="true" data-click="true"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="true"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="true" data-text=".....................I love you !.....................,一王情深喜相冯,.......人冯喜事好运王.......,..小王的冯蜜柚子茶..,几日不见 甚是想念,冯起时王向你,与你相冯一王情深,....你若安好 便是晴天...,ω.ω 念念不王久别重冯ω.ω,！！！！！！！！！！！！！想你啦！！！" data-fontsize="25px" data-random="true" async="async"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener
+  btf.removeGlobalFnEvent('pjax')
+  btf.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
